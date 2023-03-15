@@ -1,0 +1,7 @@
+digraph Tree
+{
+   rankdir = HR;
+   node[fontsize=14];
+   edge[color="black",fontcolor="blue",fontsize=12];
+   tree[shape = Mrecord, style = filled, fillcolor = "lightgoldenrod",   label = " tree "];
+}
