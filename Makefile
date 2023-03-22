@@ -18,17 +18,29 @@ FLAGS = -D _DEBUG -ggdb3 -std=c++17 -O0 -Wall -Wextra -Weffc++\
 			   -fsanitize=float-divide-by-zero,integer-divide-by-zero,nonnull-attribute,null,\
 			   -fsanitize=address,signed-integer-overflow,undefined,unreachable,vla-bound,vptr,
 
-akinatortask: main.o tree.o dump.o
-	g++ aki_obj/main.o aki_obj/tree.o aki_obj/dump.o $(FLAGS) -o akinator
+akinatortask: main.o tree.o dump.o parser.o stack.o debug.o akinator.o
+	g++ obj/main.o obj/tree.o obj/dump.o obj/parser.o obj/stack.o obj/debug.o obj/akinator.o $(FLAGS) -o akinator
 
-main.o: ./aki_src/main.cpp
-	g++ -c ./aki_src/main.cpp $(FLAGS) -o aki_obj/main.o
+main.o: ./main.cpp
+	g++ -c ./main.cpp $(FLAGS) -o obj/main.o
 
-tree.o: ./aki_src/tree.cpp
-	g++ -c ./aki_src/tree.cpp $(FLAGS) -o aki_obj/tree.o
+tree.o: ./Tree/tree.cpp
+	g++ -c ./Tree/tree.cpp $(FLAGS) -o obj/tree.o
 
-dump.o: ./aki_src/dump.cpp
-	g++ -c ./aki_src/dump.cpp $(FLAGS) -o aki_obj/dump.o
+dump.o: ./Tree/dump.cpp
+	g++ -c ./Tree/dump.cpp $(FLAGS) -o obj/dump.o
+
+parser.o: ./Parsering/parser.cpp
+	g++ -c ./Parsering/parser.cpp $(FLAGS) -o obj/parser.o
+
+stack.o: ./Stack/stack.cpp
+	g++ -c ./Stack/stack.cpp $(FLAGS) -o obj/stack.o
+
+debug.o: ./Stack/debug.cpp 
+	g++ -c ./Stack/debug.cpp $(FLAGS) -o obj/debug.o
+
+akinator.o: ./Akinator_func/akinator.cpp
+	g++ -c ./Akinator_func/akinator.cpp $(FLAGS) -o obj/akinator.o
 
 .PHONY: clean
 

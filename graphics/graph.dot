@@ -3,5 +3,19 @@ digraph Tree
    rankdir = HR;
    node[fontsize=14];
    edge[color="black",fontcolor="blue",fontsize=12];
-   tree[shape = Mrecord, style = filled, fillcolor = "lightgoldenrod",   label = " tree "];
+   tree[shape = Mrecord, style = filled, filcolor = "red", label = "My Tree | size = 7"];
+   "Живет в 225"[shape = Mrecord, style = filled, fillcolor = "lightgoldenrod",   label = " <value> Живет в 225"];
+  "Живет в 225" -> "Ботан" [color = "green"];
+  "Живет в 225" -> "Лучший РТ fotballer" [color = "red"];
+   "Ботан"[shape = Mrecord, style = filled, fillcolor = "lightgoldenrod",   label = " <value> Ботан"];
+  "Ботан" -> "Артем" [color = "green"];
+  "Ботан" -> "Жесткий ботан Makson" [color = "red"];
+   "Артем"[shape = Mrecord, style = filled, fillcolor = "lightgoldenrod",   label = " <value> Артем"];
+   "Жесткий ботан Makson"[shape = Mrecord, style = filled, fillcolor = "lightgoldenrod",   label = " <value> Жесткий ботан Makson"];
+   "Лучший РТ fotballer"[shape = Mrecord, style = filled, fillcolor = "lightgoldenrod",   label = " <value> Лучший РТ fotballer"];
+  "Лучший РТ fotballer" -> "ДимAss Тихонов" [color = "green"];
+  "Лучший РТ fotballer" -> "Валя Гвардиола" [color = "red"];
+   "ДимAss Тихонов"[shape = Mrecord, style = filled, fillcolor = "lightgoldenrod",   label = " <value> ДимAss Тихонов"];
+   "Валя Гвардиола"[shape = Mrecord, style = filled, fillcolor = "lightgoldenrod",   label = " <value> Валя Гвардиола"];
+   tree -> "Живет в 225" [color = "red"];
 }
