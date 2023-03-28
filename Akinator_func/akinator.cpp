@@ -33,10 +33,6 @@ int Akinator_Download_Tree(tree_s * const my_tree)
         return File_Error;
     }
 
-    Tree_Dump(my_tree);
-
-    Tree_Dtor(my_tree);
-
     return No_Error;
 }
 
@@ -97,6 +93,46 @@ int Akinator_Make_Node_Item(char * node_item, const char * line_start)
     strncpy(node_item, line_start, (size_t) (line_end - line_start));
 
     return No_Error;
+}
+
+//-------------------------------------------------------------------------------//
+
+int Akinator_Guessing(tree_s * const my_tree, tree_node * const cur_node)
+{
+    assert(my_tree);
+
+    if (cur_node->right == nullptr && cur_node->left == nullptr)
+    {
+        printf("Он %s?\n", cur_node->data);
+        char answer[Max_Size] = { };
+        scanf("%s", answer);
+
+        if (strcmp(answer, "yes") == 0)
+            printf("Сюда! Я гений\n");
+        
+        else if (strcmp(answer, "no") == 0)
+            printf("Фак, меня наебали(((\n");
+        
+        return No_Error;
+    }
+
+    else
+    {
+        if (cur_node == my_tree->root)
+            printf("Погнали сучки, я знаю все нахой\n");
+
+        printf("Он %s?\n", cur_node->data);
+        char answer[Max_Size] = {};
+        scanf("%s", answer);
+
+        if (strcmp(answer, "yes") == 0) 
+            Akinator_Guessing(my_tree, cur_node->left);
+        
+        else if (strcmp(answer, "no") == 0)
+            Akinator_Guessing(my_tree, cur_node->right);
+
+        return No_Error;
+    }
 }
 
 //-------------------------------------------------------------------------------//

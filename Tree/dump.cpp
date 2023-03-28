@@ -49,10 +49,11 @@ int Tree_Dump(tree_s * const my_tree)
     fprintf(graph_file, "digraph Tree\n{\n");
     fprintf(graph_file, "   rankdir = HR;\n");
     fprintf(graph_file, "   node[fontsize=14];\n   edge[color=\"black\",fontcolor=\"blue\",fontsize=12];\n");
-    fprintf(graph_file, "   tree[shape = Mrecord, style = filled, filcolor = \"red\", "
-                        "label = \"My Tree | size = %d\"];\n", my_tree->size);
+    fprintf(graph_file, "   tree[shape = Mrecord, style = filled, fillcolor = \"aquamarine\", "
+                        "label = \"{My Tree | size = %d}\"];\n", my_tree->size);
+
     Tree_Draw(my_tree->root, graph_file);
-    fprintf(graph_file, "   tree -> \"%s\" [color = \"red\"];\n", my_tree->root->data);
+    fprintf(graph_file, "   tree -> \"%p\" [color = \"red\"];\n", my_tree->root);
     fprintf(graph_file, "}");
 
     if (fclose(graph_file) == EOF)
@@ -81,14 +82,14 @@ void Tree_Draw(tree_node * const root, FILE * graph_file)
 {
     assert(root);
 
-    fprintf(graph_file, "   \"%s\"[shape = Mrecord, style = filled, fillcolor = \"lightgoldenrod\","
-                        "   label = \" <value> %s\"];\n", root->data, root->data);
+    fprintf(graph_file, "   \"%p\"[shape = Mrecord, style = filled, fillcolor = \"lightgoldenrod\","
+                        "   label = \" <value> %s\"];\n", root, root->data);
     
     if (root->left != nullptr)
-        fprintf(graph_file, "  \"%s\" -> \"%s\" [color = \"green\"];\n", root->data, root->left->data);
+        fprintf(graph_file, "  \"%p\" -> \"%p\" [color = \"green\"];\n", root, root->left);
 
     if (root->right != nullptr)
-        fprintf(graph_file, "  \"%s\" -> \"%s\" [color = \"red\"];\n", root->data, root->right->data);
+        fprintf(graph_file, "  \"%p\" -> \"%p\" [color = \"red\"];\n", root, root->right);
 
     if (root->left != nullptr)
         Tree_Draw(root->left, graph_file);
