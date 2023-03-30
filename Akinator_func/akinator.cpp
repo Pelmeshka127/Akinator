@@ -1,25 +1,28 @@
 #include "akinator.h"
 
+/// @brief 
+static void Skip_Spaces();
+
 //-------------------------------------------------------------------------------//
 
-int Akinator_Download_Tree(tree_s * const my_tree)
+int Akinator_Download_Tree(tree_s * const my_tree, FILE * src_file)
 {
     Text_Info onegin = {};
 
-    FILE * input_file = fopen("txt.txt", "r");
-    if (input_file == nullptr)
+    src_file = fopen("txt.txt", "r");
+    if (src_file == nullptr)
     {
         fprintf(stderr, "Can't open file with tree in function %s\n", __PRETTY_FUNCTION__);
         return File_Error;
     }
 
-    if (Onegin_Read(&onegin, input_file) != No_Error)
+    if (Onegin_Read(&onegin, src_file) != No_Error)
     {
         fprintf(stderr, "Failed parsering source text in function %s\n", __PRETTY_FUNCTION__);
         return File_Error;
     }
 
-    if (fclose(input_file) == EOF)
+    if (fclose(src_file) == EOF)
     {
         fprintf(stderr, "Failed clothing the source file in function %s\n", __PRETTY_FUNCTION__);
         return File_Error;
@@ -43,6 +46,9 @@ int Akinator_Read_Tree(Text_Info * const onegin, tree_s * const my_tree, tree_no
     assert(onegin);
     assert(my_tree);
 
+    while (**onegin->pointers != '{')
+        (*onegin->pointers)++;
+
     if (**onegin->pointers == '{')
     {
         while (**onegin->pointers != '\"')
@@ -54,7 +60,6 @@ int Akinator_Read_Tree(Text_Info * const onegin, tree_s * const my_tree, tree_no
 
         *cur_node = Tree_Insert_Node(my_tree, my_tree->root, node_item);
     
-
         while (**onegin->pointers != '{' && **onegin->pointers != '}')
             (*onegin->pointers)++;
 
@@ -62,9 +67,6 @@ int Akinator_Read_Tree(Text_Info * const onegin, tree_s * const my_tree, tree_no
             return No_Error;
 
         Akinator_Read_Tree(onegin, my_tree, &(*cur_node)->left);
-
-        while (**onegin->pointers != '{')
-            (*onegin->pointers)++;
 
         Akinator_Read_Tree(onegin, my_tree, &(*cur_node)->right);
     }
@@ -111,7 +113,10 @@ int Akinator_Guessing(tree_s * const my_tree, tree_node * const cur_node)
             printf("Сюда! Я гений\n");
         
         else if (strcmp(answer, "no") == 0)
+        {
             printf("Фак, меня наебали(((\n");
+            Akinator_Add_New_Node(my_tree, cur_node);
+        }
         
         return No_Error;
     }
@@ -136,3 +141,69 @@ int Akinator_Guessing(tree_s * const my_tree, tree_node * const cur_node)
 }
 
 //-------------------------------------------------------------------------------//
+
+int Akinator_Add_New_Node(tree_s * const my_tree, tree_node * const cur_node)
+{
+    assert(my_tree);
+
+    char new_node[Max_Length] = {};
+
+    printf("Це кто?\n");
+
+    Skip_Spaces();
+
+    fgets(new_node, Max_Length, stdin);
+
+    new_node[strlen(new_node) - 1] = '\0';
+
+    char difference[Max_Length] = {};
+
+    printf("В чем разница между %s и %s?\n", new_node, cur_node->data);
+
+    fgets(difference, Max_Length, stdin);
+
+    difference[strlen(difference) - 1] = '\0';
+
+    cur_node->right = Tree_Insert_Node(my_tree, cur_node->right, cur_node->data);
+    strncpy(cur_node->data, difference, Max_Length - 1);
+    cur_node->left = Tree_Insert_Node(my_tree, cur_node->left, new_node);
+
+    return No_Error;
+}
+
+//-------------------------------------------------------------------------------//
+
+int Akinator_Update_Tree_File(tree_node * const cur_node, FILE * src_file, int tabular_count)
+{
+    for (int count = 0; count < tabular_count; count++)
+        fprintf(src_file, "\t");
+        
+    fprintf(src_file, "{\"%s\"", cur_node->data);
+
+    if (cur_node->left == nullptr & cur_node->right == nullptr)
+        fprintf(src_file, "}");
+    
+    fprintf(src_file, "\n");
+
+    if (cur_node->left != nullptr)
+        Akinator_Update_Tree_File(cur_node->left, src_file, tabular_count + 1);
+    
+    if (cur_node->right != nullptr)
+        Akinator_Update_Tree_File(cur_node->right, src_file, tabular_count + 1);
+
+    if (cur_node->left != nullptr && cur_node->right != nullptr)
+    {
+        for (int count = 0; count < tabular_count; count++)
+            fprintf(src_file, "\t");
+        fprintf(src_file, "}\n");
+    }
+
+    return No_Error;  
+}
+
+//-------------------------------------------------------------------------------//
+
+static void Skip_Spaces()
+{
+    while (getchar() != '\n');
+}

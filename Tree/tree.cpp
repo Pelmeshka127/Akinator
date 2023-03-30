@@ -29,7 +29,7 @@ tree_node * Tree_Insert_Node(tree_s * const my_tree, tree_node * inserting_node,
         return nullptr;
     }
 
-    strcpy(inserting_node->data, word);
+    strncpy(inserting_node->data, word, Max_Length - 1);
     inserting_node->left  = nullptr;
     inserting_node->right = nullptr;
 
