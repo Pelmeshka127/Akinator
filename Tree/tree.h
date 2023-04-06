@@ -10,7 +10,7 @@
 #include "../Akinator_func/architecture.h"
 
 struct tree_node {
-    data_t data[Max_Size];
+    data_t data[Max_Length];
     tree_node * left;
     tree_node * right;
 };

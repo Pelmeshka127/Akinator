@@ -1,15 +1,31 @@
 #include "akinator.h"
+#include <stdarg.h>
+
+
+//-------------------------------------------------------------------------------//
 
 /// @brief 
 static void Skip_Spaces();
 
 //-------------------------------------------------------------------------------//
 
-int Akinator_Download_Tree(tree_s * const my_tree, FILE * src_file)
+/// @brief 
+/// @param answer 
+static void Input_Answer(int * answer);
+
+//-------------------------------------------------------------------------------//
+
+/// @brief 
+/// @param string 
+void Speaker(const char * string...);
+
+//-------------------------------------------------------------------------------//
+
+int Akinator_Download_Tree(tree_s * const my_tree, char * file_name)
 {
     Text_Info onegin = {};
 
-    src_file = fopen("txt.txt", "r");
+    FILE * src_file = fopen(file_name, "r");
     if (src_file == nullptr)
     {
         fprintf(stderr, "Can't open file with tree in function %s\n", __PRETTY_FUNCTION__);
@@ -71,7 +87,6 @@ int Akinator_Read_Tree(Text_Info * const onegin, tree_s * const my_tree, tree_no
         Akinator_Read_Tree(onegin, my_tree, &(*cur_node)->right);
     }
 
-
     return No_Error;
 }
 
@@ -105,16 +120,18 @@ int Akinator_Guessing(tree_s * const my_tree, tree_node * const cur_node)
 
     if (cur_node->right == nullptr && cur_node->left == nullptr)
     {
-        printf("Он %s?\n", cur_node->data);
-        char answer[Max_Size] = { };
-        scanf("%s", answer);
+        Speaker("Is he %s?\n", cur_node->data);
 
-        if (strcmp(answer, "yes") == 0)
-            printf("Сюда! Я гений\n");
+        int answer = 0;
+
+        Input_Answer(&answer);
+
+        if (answer == 'y')
+            Speaker("Yes Sir. I'm nanomashine, son\n");
         
-        else if (strcmp(answer, "no") == 0)
+        else if (answer == 'n')
         {
-            printf("Фак, меня наебали(((\n");
+            Speaker("Oh shit\n");
             Akinator_Add_New_Node(my_tree, cur_node);
         }
         
@@ -124,16 +141,18 @@ int Akinator_Guessing(tree_s * const my_tree, tree_node * const cur_node)
     else
     {
         if (cur_node == my_tree->root)
-            printf("Погнали сучки, я знаю все нахой\n");
+            Speaker("Okaaaay, lets' go\n");
 
-        printf("Он %s?\n", cur_node->data);
-        char answer[Max_Size] = {};
-        scanf("%s", answer);
+        Speaker("Is he %s?\n", cur_node->data);
 
-        if (strcmp(answer, "yes") == 0) 
+        int answer = 0;
+        
+        Input_Answer(&answer);
+
+        if (answer == 'y') 
             Akinator_Guessing(my_tree, cur_node->left);
         
-        else if (strcmp(answer, "no") == 0)
+        else if (answer == 'n')
             Akinator_Guessing(my_tree, cur_node->right);
 
         return No_Error;
@@ -148,9 +167,7 @@ int Akinator_Add_New_Node(tree_s * const my_tree, tree_node * const cur_node)
 
     char new_node[Max_Length] = {};
 
-    printf("Це кто?\n");
-
-    Skip_Spaces();
+    Speaker("Who was that?\n");
 
     fgets(new_node, Max_Length, stdin);
 
@@ -158,7 +175,7 @@ int Akinator_Add_New_Node(tree_s * const my_tree, tree_node * const cur_node)
 
     char difference[Max_Length] = {};
 
-    printf("В чем разница между %s и %s?\n", new_node, cur_node->data);
+    Speaker("What is the difference between %s and %s?\n", new_node, cur_node->data);
 
     fgets(difference, Max_Length, stdin);
 
@@ -167,6 +184,32 @@ int Akinator_Add_New_Node(tree_s * const my_tree, tree_node * const cur_node)
     cur_node->right = Tree_Insert_Node(my_tree, cur_node->right, cur_node->data);
     strncpy(cur_node->data, difference, Max_Length - 1);
     cur_node->left = Tree_Insert_Node(my_tree, cur_node->left, new_node);
+
+    Speaker("Okay, now i'm cleverer than fucking you\n");
+
+    return No_Error;
+}
+
+//-------------------------------------------------------------------------------//
+
+int Akinator_Update_Data(tree_node * const cur_node, char * file_name)
+{
+    assert(cur_node);
+
+    FILE * src_file = fopen(file_name, "w");
+    if (src_file == nullptr)
+    {
+        fprintf(stderr, "Can't open file with tree in function %s\n", __PRETTY_FUNCTION__);
+        return File_Error;
+    }
+
+    Akinator_Update_Tree_File(cur_node, src_file, 0);
+
+    if (fclose(src_file) == EOF)
+    {
+        fprintf(stderr, "Failed clothing the source file in function %s\n", __PRETTY_FUNCTION__);
+        return File_Error;
+    }
 
     return No_Error;
 }
@@ -206,4 +249,51 @@ int Akinator_Update_Tree_File(tree_node * const cur_node, FILE * src_file, int t
 static void Skip_Spaces()
 {
     while (getchar() != '\n');
+}
+
+//-------------------------------------------------------------------------------//
+
+static void Input_Answer(int * answer)
+{
+    while ((*answer = getchar()) != EOF)
+    {
+        Skip_Spaces();
+
+        if (strchr("yn", *answer) != nullptr)
+            break;
+        else
+            printf("You entered incorect symbol\n");
+    }
+}
+
+//-------------------------------------------------------------------------------//
+
+int Check_Cmdline_Arg(int argc)
+{
+    if (argc != 2)
+    {
+        fprintf(stderr, "Error: wrong number of command line args: %d\n", argc);
+        return Cmdline_Error;
+    }
+    return 0;
+}
+
+//-------------------------------------------------------------------------------//
+
+void Speaker(const char * string...)
+{
+    va_list args = {0};
+    va_start (args, string);
+
+    char message[100] = {};
+
+    vsprintf(message, string, args);
+
+    printf("%s", message);
+
+    char cmd[150] = {};
+
+    sprintf(cmd, "espeak -s 150 -v ru \"%s\"", message);
+
+    system(cmd);
 }

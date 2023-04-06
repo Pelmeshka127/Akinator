@@ -6,21 +6,18 @@
 
 int main(int argc, char ** argv)
 {
+    if (Check_Cmdline_Arg(argc) == Cmdline_Error)
+        return Cmdline_Error;
+
     Open_Log_File();
 
-    tree_s  my_tree = {};
+    tree_s my_tree = {};
 
-    FILE * src_file = nullptr;
-
-    Akinator_Download_Tree(&my_tree, src_file);
+    Akinator_Download_Tree(&my_tree, argv[1]);
 
     Akinator_Guessing(&my_tree, my_tree.root);
 
-    src_file = fopen("txt.txt", "w");
-
-    Akinator_Update_Tree_File(my_tree.root, src_file, 0);
-
-    fclose(src_file);
+    Akinator_Update_Data(my_tree.root, argv[1]);
 
     Tree_Dump(&my_tree);
 

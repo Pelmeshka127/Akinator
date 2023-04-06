@@ -6,10 +6,11 @@ enum Errors_Code {
     Bad_Alloc       = 1,
     File_Error      = 2,
     Undef_Capacity  = 3,
+    Cmdline_Error   = 4,
     Underflow       = 5,
     Overflow        = 6,
 };
 
-const int Max_Length = 40;
+const int Max_Length = 80;
 
 #endif

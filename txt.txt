@@ -1,10 +1,19 @@
-{"Живет в 225"
-    {"Ботан"
-        {"Артем"}
-        {"Жесткий ботан Makson"}
-    }
-    {"Лучший РТ fotballer"
-        {"ДимAss Тихонов"}
-        {"Валя Гвардиола"}
-    }    
+{"Live in 225"
+	{"Smart and clever"
+		{"Very smart and clever"
+			{"Moksim Dolboeb"}
+			{"Artem"}
+		}
+		{"Great Makson"}
+	}
+	{"Best football player"
+		{"Capitan"
+			{"Dima Kuzin"}
+			{"Kucheryavyy"
+				{"Kirill"}
+				{"DimAss"}
+			}
+		}
+		{"Valentin"}
+	}
 }

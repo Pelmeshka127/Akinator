@@ -12,7 +12,7 @@
 /// @brief Function makes tree from source file
 /// @param my_tree is ptr on the tree struct
 /// @return File_Error if creating tree failed, No_Error if it's ok
-int Akinator_Download_Tree(tree_s * const my_tree, FILE * src_file);
+int Akinator_Download_Tree(tree_s * const my_tree, char * file_name);
 
 //-------------------------------------------------------------------------------//
 
@@ -55,6 +55,20 @@ int Akinator_Add_New_Node(tree_s * const my_tree, tree_node * const cur_node);
 /// @param tabular_count 
 /// @return 
 int Akinator_Update_Tree_File(tree_node * const cur_node, FILE * src_file, int tabular_count);
+
+//-------------------------------------------------------------------------------//
+
+/// @brief 
+/// @param cur_node 
+/// @return 
+int Akinator_Update_Data(tree_node * const cur_node, char * file_name);
+
+//-------------------------------------------------------------------------------//
+
+/// @brief 
+/// @param argc 
+/// @return 
+int Check_Cmdline_Arg(int argc);
 
 //-------------------------------------------------------------------------------//
 
