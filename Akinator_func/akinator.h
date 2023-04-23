@@ -65,6 +65,8 @@ int Akinator_Update_Data(tree_node * const cur_node, char * file_name);
 
 //-------------------------------------------------------------------------------//
 
+tree_node * Tree_Find_Item(tree_s * const my_tree, Stack* stack, tree_node * const tree_root, char* item);
+
 /// @brief 
 /// @param argc 
 /// @return 

@@ -15,7 +15,14 @@ int main(int argc, char ** argv)
 
     Akinator_Download_Tree(&my_tree, argv[1]);
 
-    Akinator_Guessing(&my_tree, my_tree.root);
+    Stack stack = {};
+    Stack_Ctor(&stack);
+
+    Tree_Find_Item(&my_tree, &stack, my_tree.root, "Наташааа");
+
+    Stack_Dtor(&stack);
+
+    //Akinator_Guessing(&my_tree, my_tree.root);
 
     Akinator_Update_Data(my_tree.root, argv[1]);
 

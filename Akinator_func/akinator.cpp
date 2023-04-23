@@ -246,6 +246,30 @@ int Akinator_Update_Tree_File(tree_node * const cur_node, FILE * src_file, int t
 
 //-------------------------------------------------------------------------------//
 
+
+tree_node * Tree_Find_Item(tree_s * const my_tree, Stack* stack, tree_node * const tree_root, char* item)
+{
+    assert(my_tree);
+
+    if (tree_root == nullptr)
+        return nullptr;
+
+    Stack_Push(stack, tree_root);
+
+    if (strcmp(item, tree_root->data) == 0)
+        return tree_root;
+
+    if (tree_root->left && Tree_Find_Item(my_tree, stack, tree_root->left, item))
+        return stack->data[stack->size - 1];
+    
+    if (tree_root->right && Tree_Find_Item(my_tree, stack, tree_root->right, item))
+        return stack->data[stack->size - 1];
+
+    Stack_Pop(stack);
+
+    return nullptr;
+}
+
 static void Skip_Spaces()
 {
     while (getchar() != '\n');
